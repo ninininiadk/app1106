@@ -15,7 +15,7 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.10.0/fireba
 import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js';
 
 // Replace with the Firebase project's Web App config (Firebase Console > Project settings > Your apps).
-const firebaseConfig = { apiKey: "AIzaSyAgqlVNhDdkGQy-9oDfCFoj_dH2DLZhVwM", authDomain: "app1106-d8c50.firebaseapp.com", projectId: "app1106-d8c50", storageBucket: "app1106-d8c50.firebasestorage.app", messagingSenderId: "267208116240", appId: "1:267208116240:web:f2280ab3c48ecb0b56295" };
+const firebaseConfig = { apiKey: "AIzaSyAgqlVNhDdkgQy-9oDfCFoj_dH2DlZhVwM", authDomain: "app1106-d8c50.firebaseapp.com", projectId: "app1106-d8c50", storageBucket: "app1106-d8c50.firebasestorage.app", messagingSenderId: "267208116240", appId: "1:267208116240:web:f2280ab3c48ecb0b56295" };
 const isFirebaseConfigured = !Object.values(firebaseConfig).some(v => v.startsWith('YOUR_'));
 const authError = document.getElementById('authError');
 const showAuthError = message => { authError.textContent = message; authError.classList.add('show'); setTimeout(() => authError.classList.remove('show'), 6000); };
