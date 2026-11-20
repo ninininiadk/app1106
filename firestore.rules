@@ -1,0 +1,37 @@
+// Prototype rules for the Shiguang planner.
+// Assumed model: users/{uid}/items/{itemId} with event/task fields.
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedInAs(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+    function validItem(data, uid) {
+      return data.keys().hasOnly(['uid', 'id', 'name', 'type', 'date', 'time', 'due', 'notes', 'done'])
+        && data.keys().hasAll(['uid', 'id', 'name', 'type', 'date', 'time', 'due', 'notes', 'done'])
+        && data.uid == uid
+        && data.id is string && data.id.size() > 0 && data.id.size() <= 80
+        && data.name is string && data.name.size() > 0 && data.name.size() <= 80
+        && data.type in ['event', 'exam', 'task']
+        && data.date is string && data.date.matches('^\\d{4}-\\d{2}-\\d{2}$')
+        && data.time is string && data.time.size() <= 5
+        && data.due is string && data.due.size() <= 10
+        && data.notes is string && data.notes.size() <= 240
+        && data.done is bool;
+    }
+    match /users/{uid}/items/{itemId} {
+      allow read: if signedInAs(uid);
+      allow create: if signedInAs(uid)
+        && request.resource.data.id == itemId
+        && validItem(request.resource.data, uid);
+      allow update: if signedInAs(uid)
+        && request.resource.data.id == itemId
+        && request.resource.data.uid == resource.data.uid
+        && validItem(request.resource.data, uid);
+      allow delete: if signedInAs(uid);
+    }
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
